@@ -1,6 +1,6 @@
 import sys
 
-from PIL import Image
+from PIL import Image, ImageFilter
 
 # You need to import ImageQt explicitly for the conversion function
 from PIL.ImageQt import ImageQt
@@ -52,13 +52,17 @@ class MainWindow(QMainWindow):
         self.image_viewer = ResizableImageWidget()
         central_widget_layout.addWidget(self.image_viewer)
 
-        self.rotate_pushbutton = QPushButton("Rotate 45")
-        operations_widget_layout.addWidget(self.rotate_pushbutton)
-        self.rotate_pushbutton.clicked.connect(self.rotate_45)
+        self.rotate_45_pushbutton = QPushButton("Rotate 45")
+        operations_widget_layout.addWidget(self.rotate_45_pushbutton)
+        self.rotate_45_pushbutton.clicked.connect(self.rotate_45)
 
-        self.rotate_pushbutton = QPushButton("Rotate 90")
-        operations_widget_layout.addWidget(self.rotate_pushbutton)
-        self.rotate_pushbutton.clicked.connect(self.rotate_90)
+        self.rotate_90_pushbutton = QPushButton("Rotate 90")
+        operations_widget_layout.addWidget(self.rotate_90_pushbutton)
+        self.rotate_90_pushbutton.clicked.connect(self.rotate_90)
+
+        self.blur_pushbutton = QPushButton("Blur")
+        operations_widget_layout.addWidget(self.blur_pushbutton)
+        self.blur_pushbutton.clicked.connect(self.blur)
 
         operations_widget_layout.addStretch()
 
@@ -82,6 +86,12 @@ class MainWindow(QMainWindow):
         if self.pil_image is None:
             return
         self.pil_image = self.pil_image.rotate(90)
+        self.image_viewer.set_from_pillow_image(self.pil_image)
+
+    def blur(self):
+        if self.pil_image is None:
+            return
+        self.pil_image = self.pil_image.filter(ImageFilter.GaussianBlur(5))
         self.image_viewer.set_from_pillow_image(self.pil_image)
 
 
