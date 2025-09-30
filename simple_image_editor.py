@@ -39,6 +39,11 @@ class MainWindow(QMainWindow):
         open_action.triggered.connect(self.open_file)
         file_menu.addAction(open_action)
 
+        save_action = QAction("SaveAs...", self)
+        save_action.setShortcut(QKeySequence.StandardKey.SaveAs)
+        save_action.triggered.connect(self.save_as)
+        file_menu.addAction(save_action)
+
         central_widget = QWidget()
         central_widget_layout = QHBoxLayout()
         central_widget.setLayout(central_widget_layout)
@@ -75,6 +80,12 @@ class MainWindow(QMainWindow):
             print(f"Error: Image file not found at {file_path}")
         except Exception as e:
             print(f"Error loading or converting image: {e}")
+
+    def save_as(self):
+        if self.pil_image is None:
+            return
+        file_path, _ = QFileDialog.getSaveFileName(self, "Save image file", "", "*.png")
+        self.pil_image.save(file_path)
 
     def rotate_45(self):
         if self.pil_image is None:
